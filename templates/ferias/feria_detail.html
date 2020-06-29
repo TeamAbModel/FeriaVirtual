@@ -1,0 +1,79 @@
+{% extends "main_template.html" %}
+
+{% load humanize %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static '/style.css' %}">
+<link rel="stylesheet" href="{% static '/menu/menustyle.css' %}">
+<header>
+        <div class="contenedor">
+            <div class="marca">
+                <h1><span class="resaltado">DidEatsYa!</span> Pide, espera y disfruta!</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li id="1"><a href="{% url 'inicio' %}">Inicio</a></li>
+                    <li id="2" class="actual"><a href="{% url 'ferias:allfairs' %}">Ferias</a></li>
+                    <li id="3"><a href="{% url 'productos:allproducts' %}">Productos</a></li>
+                    {% if user.is_authenticated %}
+                            <li style="width:12%" class="navli"><a href="#">{{ user.get_username }}</a>
+                                <ul class="child">
+                                    <li><a href= "{{ user.cuenta.get_absolute_url }}">Profile</a></li>
+                                    {% if user.is_superuser %}
+                                        <li><a href="{% url 'ferias:buscar' %}">Mantenedor Ferias</a></li>
+                                        <li><a href="{% url 'productos:buscar' %}">Mantenedor Productos</a></li>
+                                    {% endif %}
+                                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}?next={{request.path}}">Login</a>
+                        {% endif %}
+                </ul>
+            </nav>
+        </div>
+</header>
+<div class="container">
+    <!--MAIN-->
+    <div class="col-lg-12">
+
+        <!--CARRUSEL-->
+        <div class="card mt-4">
+            <div id="demo" class="carousel slide" data-ride="carousel">
+
+                <!-- Indicators -->
+                <ul class="carousel-indicators">
+                    <li data-target="#demo" data-slide-to="0" class="active"></li>
+                </ul>
+        
+                <!-- The slideshow -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{{ object.feria_imagen.url }}" alt="Imagen Principal" style="width:1000px;height: 570px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--TEXTO DE PROD-->
+        <div class="card-body">
+            <h2 class="card-title">{{ object.feria_calle }}</h2>
+            <h4>En la comuna de </h4>
+            <h3>{{ object.feria_comuna}}</h3>
+            <h4>Desde</h4>
+            <h5>{{ object.feria_direccion_ini}}</h5>
+            <h4>Hasta</h4>
+            <h5>{{ object.feria_direccion_fin}}</h4>
+            <h4>Desde</h4>
+            <h6>{{ object.feria_horario_ini}} HRS.</h6>
+            <h4>Hasta</h4>
+            <h6>{{ object.feria_horario_fin}} HRS.</h6>
+            <h4>En los dia/s</h4>
+            <h6>{{ object.feria_dias}}</h6>
+            </div>
+         </div>
+    </div>
+</div>
+{% endblock %}
